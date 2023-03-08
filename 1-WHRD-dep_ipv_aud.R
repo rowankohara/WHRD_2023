@@ -80,4 +80,10 @@ s4s_clean %>%
 # 1125 participants report IPV and AUD (15% of total sample)
 # Female = 777 (16% of females)
 # Male = 348 (13% of males)
+
+
+# WRITE OUTPUT #################################################################
+
+write_csv(s4s_clean, "WHRD_clean.csv", 
+          append = FALSE, col_names = TRUE)
   
