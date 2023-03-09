@@ -17,11 +17,11 @@ clean_s4s <- s4s %>%
 
 clean_dep <- clean_s4s %>%
   rowwise() %>%               # https://dplyr.tidyverse.org/articles/rowwise.html
-  mutate(dep_noAnswer = sum(c_across(y1f_hea_1c:y1f_hea_1g) == -99), # https://stackoverflow.com/questions/51783095/compute-row-wise-counts-in-subsets-of-columns-in-dplyr
-         dep_skip = sum(c_across(y1f_hea_1c:y1f_hea_1g) == -9),
+  mutate(dep_noAnswer = sum(c_across(c(y1f_hea_1c,y1f_hea_1d, y1f_hea_1e, y1f_hea_1g)) == -99), # https://stackoverflow.com/questions/51783095/compute-row-wise-counts-in-subsets-of-columns-in-dplyr
+         dep_skip = sum(c_across(c(y1f_hea_1c,y1f_hea_1d, y1f_hea_1e, y1f_hea_1g)) == -9),
          dep_filter = sum(c_across(dep_noAnswer:dep_skip))) %>%
   filter(dep_filter < 3)
-# n = 7559
+# n = 7561
 
 
 
@@ -41,7 +41,7 @@ s4s_clean <- clean_dep %>%
          y1f_hea_1g = if_else(y1f_hea_1g == -9 | y1f_hea_1g == -99, 0, y1f_hea_1g)) %>%  # https://dplyr.tidyverse.org/reference/if_else.html
   mutate(dep_filter = 4 - dep_filter) %>%
   rowwise() %>%
-  mutate(depScore = sum(c_across(y1f_hea_1c:y1f_hea_1g))) %>%  # https://dplyr.tidyverse.org/reference/c_across.html
+  mutate(depScore = sum(c_across(c(y1f_hea_1c,y1f_hea_1d, y1f_hea_1e, y1f_hea_1g)))) %>%  # https://dplyr.tidyverse.org/reference/c_across.html
   mutate(depScore = if_else(dep_filter != 4, (depScore / dep_filter) * 4, depScore))
 
 
@@ -50,29 +50,29 @@ s4s_clean <- clean_dep %>%
 s4s_clean %>%
   count(biosex)
 # Female = 4872 (64%)
-# Male = 2687 (36%)
+# Male = 2689 (36%)
 
 s4s_clean %>%
   count(ever_ipv)
-# Never = 4626 (61%)
-# Ever = 2933 (39%)
+# Never = 4627 (61%)
+# Ever = 2934 (39%)
 
 s4s_clean %>%
   count(ever_aud)
-# Never = 5200 (69%)
-# Ever = 2359 (31%)
+# Never = 5201 (69%)
+# Ever = 2360 (31%)
 
 s4s_clean %>%
   group_by(biosex) %>%
   count(ever_ipv)
 # Female & Ever = 2061 (42% of females) (27% of total sample)
-# Male & Ever = 872 (32% of males) (12% of total sample)
+# Male & Ever = 873 (32% of males) (12% of total sample)
 
 s4s_clean %>%
   group_by(biosex) %>%
   count(ever_aud)
 # Female & Ever = 1523 (31% of females) (20% of total sample)
-# Male & Ever = 836 (31% of females) (11% of total sample)
+# Male & Ever = 837 (31% of females) (11% of total sample)
 
 s4s_clean %>%
   filter(ever_ipv == 1 & ever_aud == 1) %>%
@@ -80,6 +80,9 @@ s4s_clean %>%
 # 1125 participants report IPV and AUD (15% of total sample)
 # Female = 777 (16% of females)
 # Male = 348 (13% of males)
+
+summary(s4s_clean$depScore)
+
 
 
 # WRITE OUTPUT #################################################################
