@@ -206,12 +206,14 @@ ggplot(s4s_table, aes(x = depScore, y = ever_aud, fill = biosex)) +
 s4s_model1 <- glm(ever_aud ~ biosex + ever_ipv + depScore, family = binomial, data = s4s_table)
 s4s_model2 <- glm(ever_aud ~ biosex + sumscore_PA + depScore, family = binomial, data = s4s_table)
 s4s_model3 <- glm(ever_aud ~ biosex + sumscore_SA + depScore, family = binomial, data = s4s_table)
+s4s_model4 <- glm(ever_aud ~ ever_ipv + depScore, family = binomial, data = s4s_table)
 
 
 models <- list(
   "Model 1"     = s4s_model1, # Coeff = 8.48, Std Err = 0.06, p = 8.51e-112
   "Model 2"     = s4s_model2, # Coeff = 6.60, Std Err = 0.05, p = 1.84e-110
-  "Model 3"     = s4s_model3 # Coeff = 9.07, Std Err = 0.05, p = 3.79e-32
+  "Model 3"     = s4s_model3, # Coeff = 9.07, Std Err = 0.05, p = 3.79e-32
+  "Model 4"     = s4s_model4
 )
 
 modelsummary(models, "markdown", 
@@ -228,10 +230,12 @@ glance(s4s_model1)
 summary(s4s_model1)$coefficient
 summary(s4s_model2)$coefficient
 summary(s4s_model3)$coefficient
+summary(s4s_model4)$coefficient
 
 report(s4s_model1)
 report(s4s_model2)
 report(s4s_model3)
+report(s4s_model4)
 
 
 ### plots ####

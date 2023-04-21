@@ -1,0 +1,139 @@
+---
+title: Examination of sex differences in the association of interpersonal violence and symptoms of depression and alcohol use disorder among college students
+knit: pagedown::chrome_print
+author:
+  - name: Rowan K. O'Hara
+    affil: 1, 2
+    twitter: RowanKOHara
+    email: oharark@vcu.edu
+    main: true
+  - name: Eva E. Lancaster, PhD,
+    affil: 1
+  - name: The Spit for Science Working Group,
+  - name: Christina Sheerin, PhD,
+    affil: 1
+  - name: Elizabeth Prom-Wormley, PhD,
+    affil: 1, 3
+  - name: Roseann E. Peterson, PhD
+    affil: 1, 4
+    twitter: POPGEM_Lab
+affiliation:
+  - num: 1
+    address: Virginia Institute for Psychiatric and Behavioral Genetics, Department of Psychiatry, School of Medicine.
+  - num: 2
+    address: Center for Biological Data Science, VCU Life Sciences.
+  - num: 3
+    address: Division of Epidemiology, Department of Family Medicine and Population Health, School of Medicine.
+  - num: 4
+    address: Department of Psychiatry and Behavioral Sciences, Institute for Genomics in Health, SUNY Downstate Health Sciences University.
+main_findings:
+  - "**Sex** did **not** moderate the association of **interpersonal violence** with symptoms of **depression** and **alcohol use disorder**."
+  - '![](vipbg_logo.png){.main_pic}'
+main_width: 0.4
+main_textsize: "130px"
+main_picwidth: "80%"
+logoleft_name: '![](qr-code.PNG){.main-img-left width=15%}'
+logoright_name: '![](s4s_poster_qr.png){.main-img-right width=15%}'
+title_textsize: "80pt"
+main_fontfamily: "Lato"
+primary_colour: "black"
+secondary_colour: "black"
+body_textsize: "34pt"
+output: 
+  posterdown::posterdown_betterland:
+    self_contained: false
+    pandoc_args: --mathjax
+    highlight: haddock
+    number_sections: false
+link-citations: true
+bibliography: [packages.bib, references.bib]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(results = 'asis',
+                      echo = FALSE,
+                      warning = FALSE,
+                      tidy = FALSE,
+                      message = FALSE,
+                      fig.align = 'center')
+options(knitr.table.format = "html") 
+
+library(tidyverse)
+library(patchwork)
+
+s4s <- read_csv("WHRD_clean.csv")
+
+s4s_table <- s4s %>%
+  mutate(ever_ipv = as.factor(ever_ipv),
+         sumscore_SA = as.factor(if_else(sumscore_SA > 0 | sumscore_other > 0, 1, 0)),
+         sumscore_PA = as.factor(sumscore_PA),
+         ever_aud = as.factor(ever_aud)) %>%
+  mutate(ever_ipv = fct_recode(ever_ipv, Yes = "1", No = "0"),
+         sumscore_SA = fct_recode(sumscore_SA, Yes = "1", No = "0"),
+         sumscore_PA = fct_recode(sumscore_PA, Yes = "1", No = "0"),
+         ever_aud = fct_recode(ever_aud, Yes = "1", No = "0"))
+```
+
+
+# Introduction
+
+* Childhood interpersonal violence (IPV) exposure increases the risk for major depression and alcohol use disorder (AUD) [@colman_stress_2013].
+* In the United States, women have a higher prevalence of experiencing major depression and IPV than men [@altemus_sex_2014; @smith_national_2017].
+
+
+# Methods
+
+* Data were from the Spit for Science project collected from college students (*N* = 7561, 64% female).
+* Participants self-reported IPV exposure (experiencing physical or sexual assault prior to starting college), depression symptoms (4-item abbreviated Symptoms Checklist-90 for previous 30 days), and AUD symptoms (11-item DSM-5 criteria for the last year).
+
+```{r demotable, out.width="80%"}
+
+knitr::include_graphics("table1.png")
+
+```
+
+
+<br>
+
+# Results
+
+```{r graph1, out.width="70%"}
+
+ggplot(s4s_table, aes(x = depScore, y = ever_ipv, fill = biosex)) +
+  geom_boxplot(alpha = 0.65) +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Sex Differences in IPV Exposure and Depression Symptom Scores",
+       x = "Depression Symptom Score",
+       y = "IPV Exposure") +
+  scale_fill_manual(values = c("#FFB300", "#000000"), name = "Biological Sex")
+
+ggplot(s4s_table, aes(x = depScore, y = ever_aud, fill = biosex)) +
+  geom_boxplot(alpha = 0.65) +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Sex Differences in AUD and Depression Symptom Scores",
+       x = "Depression Symptom Score",
+       y = "Ever AUD") +
+  scale_fill_manual(values = c("#FFB300", "#000000"), name = "Biological Sex")
+
+```
+
+
+```{r ttable, out.width="70%"}
+
+knitr::include_graphics("table2.png")
+
+```
+
+```{r linregtable, out.width="70%"}
+
+knitr::include_graphics("table3.png")
+
+```
+
+# Conclusions
+* There was no difference in the rate of AUD between the sexes (31% vs. 31%, *p* = 0.53), lending evidence to the decreasing gap in negative alcohol phenotypes between the sexes [@white_converging_2015].
+* Biological sex was not a significant predictor for AUD (*p* = 0.08).
+
+# References
